@@ -28,12 +28,13 @@ function buildMetadata(sample) {
      d3.json(url).then(function(data) { 
       var ybar = data.otu_ids;
       var xbar = data.sample_values;
-      
+      var barHover = data.otu_labels;
 
         // Build a Bar Chart using the sample data
         var trace1 = {
           y: ybar.slice(0, 10).map(object => `OTU ${object}`).reverse(),
           x: xbar.slice(0, 10).reverse(),
+          hovertext: barHover.slice(0, 10).reverse(),
           type: "bar",
           orientation: "h"
         }
