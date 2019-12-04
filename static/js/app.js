@@ -61,6 +61,7 @@ function buildMetadata(sample) {
     var fraction = wfreq/9;
 
     //use trigonometry to calculate meter point
+    //var level = parseFloat(wfreq) * 20;
     var level = fraction * 180;
     var degrees = 180 - level, radius = .5;
     var radians = degrees * Math.PI / 180;
