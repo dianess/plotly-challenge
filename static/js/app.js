@@ -21,7 +21,50 @@ function buildMetadata(sample) {
       })
     })
   };
-  
+
+  function buildBarChart(sample) {
+     // Use `d3.json` to fetch the sample data for the bar chart
+     var url = `/samples/${sample}`;
+     d3.json(url).then(function(data) { 
+      var ybar = data.otu_ids;
+      var xbar = data.sample_values;
+      
+
+        // Build a Bar Chart using the sample data
+        var trace1 = {
+          y: ybar.slice(0, 10).map(object => `OTU ${object}`).reverse(),
+          x: xbar.slice(0, 10).reverse(),
+          type: "bar",
+          orientation: "h"
+        }
+          var data = [trace1];
+          
+        // Apply the group bar mode to the layout
+        var layout = {
+            title: "Top 10 OTUs",
+            margin: {
+              l: 100,
+              r: 100,
+              t: 100,
+              b: 100
+            }
+          };
+          
+          // Render the plot to the div tag with id "plot"
+          Plotly.newPlot("plot", data, layout);
+  });
+}
+  // function buildGaugeChart(sample) {
+  //   // Use `d3.json` to fetch the sample data for the bar chart
+  //   var url = `/metadata/${sample}`;
+  //   d3.json(url).then(function(data) {  
+  //    //Build a Pie Chart
+  //    y: 
+
+  // }
+  // } 
+
+
   function buildCharts(sample) {
   
     // Use `d3.json` to fetch the sample data for the plots
@@ -54,25 +97,8 @@ function buildMetadata(sample) {
   
       Plotly.newPlot('bubble', data, layout);
   
-      // Build a Pie Chart
-      // Use slice() to grab the top 10 sample_values,
-      // otu_ids, and labels (10 each).
-      d3.json(url).then(function(data) {
-        var pieValue = data.sample_values.slice(0,10);
-        var pielabel = data.otu_ids.slice(0, 10);
-        var pieHover = data.otu_labels.slice(0, 10);
-  
-        var data = [{
-          values: pieValue,
-          labels: pielabel,
-          hovertext: pieHover,
-          type: 'pie'
-        }];
-  
-        Plotly.newPlot('pie', data);
-      });
     });
-  };
+  }  
   
   function init() {
     // Grab a reference to the dropdown select element
@@ -89,6 +115,7 @@ function buildMetadata(sample) {
   
       // Use the first sample from the list to build the initial plots
       const firstSample = sampleNames[0];
+      buildBarChart(firstSample);
       buildCharts(firstSample);
       buildMetadata(firstSample);
     });
@@ -96,8 +123,10 @@ function buildMetadata(sample) {
   
   function optionChanged(newSample) {
     // Fetch new data each time a new sample is selected
+    buildBarChart(newSample);
     buildCharts(newSample);
     buildMetadata(newSample);
+
   };
   
   // Initialize the dashboard
