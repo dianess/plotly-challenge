@@ -117,7 +117,7 @@ function buildMetadata(sample) {
                 color: '850000'
             }
         }],
-        title: 'Belly Button Washing Frequency Scrubs per Week',
+        title: 'Belly Button Washing Frequency</b> <br> Scrubs per Week',
         xaxis: {
             zeroline: false, 
             showticklabels: false,
