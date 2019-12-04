@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 
 from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
+from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 
@@ -19,6 +20,7 @@ app = Flask(__name__)
 #################################################
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/bellybutton.sqlite"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # reflect an existing database into a new model
@@ -103,3 +105,6 @@ def samples(sample):
 
 if __name__ == "__main__":
     app.run()
+    app.run(debug=True, host="0.0.0.0", port="5000")
+    http_server = WSGIServer(('', 5000), app)
+    http_server.serve_forever()
