@@ -55,88 +55,56 @@ function buildMetadata(sample) {
           Plotly.newPlot("plot", data, layout);
   });
 }
-  //function to build gauge chart
-    function buildGaugeChart(wfreq) {
-    //calculate wfreq as a fraction of 9
-    var fraction = wfreq/9;
 
-    //use trigonometry to calculate meter point
-    //var level = parseFloat(wfreq) * 20;
-    var level = fraction * 180;
-    var degrees = 180 - level, radius = .5;
-    var radians = degrees * Math.PI / 180;
-    var x = radius * Math.cos(radians);
-    var y = radius * Math.sin(radians);
-
-    //Path
-    var mainPath = 'M -.0 -0.025 L .0 0.025 L ',
-        pathX = String(x),
-        space = ' ',
-        pathY = String(y),
-        pathEnd = ' Z';
-    var path = mainPath.concat(pathX, space, pathY, pathEnd);
-
-    //create data object
-    var data = [{ 
-        type: 'scatter',
-        x: [0],
-        y: [0],
-        marker: {size: 28, color: '850000'},
-        showlegend: false,
-        name: ' wpw',
-        text: wfreq,
-        hoverinfo: 'text+name'},
+  function buildGaugeChart(sample) {
+    
+     // Use `d3.json` to fetch the sample data for the plots
+     var url = `/metadata/${sample}`;
+     d3.json(url).then(function(data) {
+        console.log(data);
+        var freqValues = data.WFREQ;
+        console.log(freqValues);
+        var data = [
         {
-            values: [50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50],
-            rotation: 90,
-            text: ['8-9', '7-8', '6-7', '5-6', '4-5', '3-4', '2-3', '1-2', '0-1', ''],
-            textinfo: 'text',
-            textposition: 'inside',
-            marker: {
-                colors: ['rgba(119, 170, 221, .5)', 
-                'rgba(153, 221, 255, .5)', 
-                'rgba(68, 187, 153, .5)', 
-                'rgba(187, 204, 51, .5)', 'rgba(170, 170, 0, .5)', 
-                'rgba(238, 221, 136, .5)', 'rgba(238, 136, 102, .5)', 
-                'rgba(255, 170, 187, .5)', 'rgba(221, 221, 221, .5)', 
-                'rgba(255, 255, 255, 0)']
-            },
-            labels: ['8-9', '7-8', '6-7', '5-6', '4-5', '3-4', '2-3', '1-2', '0-1', ''],
-            hoverinfo: 'label',
-            hole: .5,
-            type: 'pie',
-            showlegend: false
-    }];
-
-    //create layout object
-    var layout = {
-        shapes:[{
-            type: 'path',
-            path: path,
-            fillcolor: '850000',
-            line: {
-                color: '850000'
+          type: "indicator",
+          mode: "gauge+number",
+          value: freqValues,
+          title: { text: "Belly Button Washing Frequency</b> <br> Scrubs per Week", font: { size: 18 } },
+          gauge: {
+            axis: { range: [null, 9], tickwidth: 1, tickcolor: "black" },
+            bar: { color: "black" },
+            bgcolor: "white",
+            borderwidth: 2,
+            bordercolor: "black",
+            steps: [
+              { range: [0, 1], color: "lightcoral" },
+              { range: [1, 2], color: "lightpink" },
+              { range: [2, 3], color: "yellowgreen" },
+              { range: [3, 4], color: "lightgreen" },
+              { range: [4, 5], color: "green" },
+              { range: [5, 6], color: "lightblue" },
+              { range: [6, 7], color: "cyan" },
+              { range: [7, 8], color: "royalblue" },
+              { range: [8, 9], color: "blue" }
+            ],
             }
-        }],
-        title: 'Belly Button Washing Frequency</b> <br> Scrubs per Week',
-        xaxis: {
-            zeroline: false, 
-            showticklabels: false,
-            showgrid: false,
-            range: [-1, 1]
-        },
-        yaxis: {
-            zeroline: false,
-            showticklabels: false,
-            showgrid: false,
-            range: [-1, 1]
-        }
-    };
-
+          }
+        
+      ];
+      
+      var layout = {
+        width: 500,
+        height: 400,
+        margin: { t: 25, r: 25, l: 25, b: 25 },
+        paper_bgcolor: "lavender",
+        font: { color: "darkblue", family: "Arial" }
+      };
+    
+    var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
     //plot
     Plotly.newPlot("gauge", data, layout);
-    }
-
+    });
+}
 
   function buildCharts(sample) {
   
