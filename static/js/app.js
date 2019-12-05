@@ -18,9 +18,9 @@ function buildMetadata(sample) {
         var row = sample_metadata.append("p");
         row.text(`${key}: ${value}`);
   
-      })
-    })
-  };
+      })  //ends the Object.entries(sample).forEach...
+    }) //ends the section for d3.json(url.then(function(data) 
+  };  //ends the function buildMetadata(sample)
 
   function buildBarChart(sample) {
      // Use `d3.json` to fetch the sample data for the bar chart
@@ -48,34 +48,36 @@ function buildMetadata(sample) {
               r: 100,
               t: 100,
               b: 100
-            }
-          };
+            }  //ends the margin
+          };  //ends the layout
           
           // Render the plot to the div tag with id "plot"
           Plotly.newPlot("plot", data, layout);
-  });
-}
-
+  });  //ends the section for d3.json(url.then(function(data) 
+  } //ends the function buildBarChart(sample)
+  
+  // Build the gauge chart
   function buildGaugeChart(sample) {
     
-     // Use `d3.json` to fetch the sample data for the plots
+     // Use `d3.json` to fetch the metadata
      var url = `/metadata/${sample}`;
      d3.json(url).then(function(data) {
-        console.log(data);
+        //console.log(data);  - used to make sure I was getting the data I wanted
         var freqValues = data.WFREQ;
-        console.log(freqValues);
-        var data = [
+        //console.log(freqValues);  used to check the value
+      var data = [
         {
           type: "indicator",
           mode: "gauge+number",
           value: freqValues,
           title: { text: "Belly Button Washing Frequency</b> <br> Scrubs per Week", font: { size: 18 } },
           gauge: {
-            axis: { range: [null, 9], tickwidth: 1, tickcolor: "black" },
-            bar: { color: "black" },
+            axis: { range: [null, 9], tickwidth: 1, tickcolor: "black" }, // Max value is 9
+            bar: { color: "black" },  // Color of the bar (black) that indicates the washing frequency value
             bgcolor: "white",
             borderwidth: 2,
             bordercolor: "black",
+            // Set the colors for the different ranges on the gauge
             steps: [
               { range: [0, 1], color: "lightcoral" },
               { range: [1, 2], color: "lightpink" },
@@ -86,11 +88,11 @@ function buildMetadata(sample) {
               { range: [6, 7], color: "cyan" },
               { range: [7, 8], color: "royalblue" },
               { range: [8, 9], color: "blue" }
-            ],
-            }
-          }
+            ],  //ends the steps: section
+          }  //ends the gauge: section
+        }  //ends the curly brace after var data [
         
-      ];
+      ];  //ends the bracket with var data [
       
       var layout = {
         width: 500,
@@ -98,13 +100,13 @@ function buildMetadata(sample) {
         margin: { t: 25, r: 25, l: 25, b: 25 },
         paper_bgcolor: "lavender",
         font: { color: "darkblue", family: "Arial" }
-      };
+      };  //ends the layout
     
     var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
     //plot
     Plotly.newPlot("gauge", data, layout);
-    });
-}
+    });  // ends d3.json(url).then(function(data)
+  }  //ends the function buildGaugeChart(sample)
 
   function buildCharts(sample) {
   
@@ -127,19 +129,19 @@ function buildMetadata(sample) {
         marker: {
           size: mSize,
           color: mClrs
-        }
-      };
+        }  //ends marker:
+      };  //ends trace_bubble
   
       var data = [trace_bubble];
   
       var layout = {
         xaxis: {title: "OTU ID"}
-      };
+      }; //ends the layout
   
       Plotly.newPlot('bubble', data, layout);
   
-    });
-  }  
+    });  //ends the d3.json(url).then(function(data)
+  }  //ends the function buildCharts(sample)
   
   function init() {
     // Grab a reference to the dropdown select element
@@ -152,7 +154,7 @@ function buildMetadata(sample) {
           .append("option")
           .text(sample)
           .property("value", sample);
-      });
+      }); //ends the sampleNames.forEach...
   
       // Use the first sample from the list to build the initial plots
       const firstSample = sampleNames[0];
@@ -160,8 +162,8 @@ function buildMetadata(sample) {
       buildGaugeChart(firstSample);
       buildCharts(firstSample);
       buildMetadata(firstSample);
-    });
-  };
+    });  //ends the d3.json("/names").then((sampleNames)
+  };  //ends the function(init()
   
   function optionChanged(newSample) {
     // Fetch new data each time a new sample is selected
@@ -170,7 +172,7 @@ function buildMetadata(sample) {
     buildCharts(newSample);
     buildMetadata(newSample);
 
-  };
+  }; //ends the function(optionChanged(newSample)
   
   // Initialize the dashboard
   init();
