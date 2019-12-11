@@ -108,6 +108,7 @@ function buildMetadata(sample) {
     });  // ends d3.json(url).then(function(data)
   }  //ends the function buildGaugeChart(sample)
 
+  // Build the bubble chart
   function buildCharts(sample) {
   
     // Use `d3.json` to fetch the sample data for the plots
